@@ -1,0 +1,1155 @@
+{
+	"info": {
+		"_postman_id": "fbfd7ef7-62cd-4f1f-8fee-039ff2f52bc4",
+		"name": "Anatoly-QA-internship",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34353251"
+	},
+	"item": [
+		{
+			"name": "POST /api/1/item",
+			"item": [
+				{
+					"name": "Позитивные тесты",
+					"item": [
+						{
+							"name": "1. Успешное создание объявления с валидными данными",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// Проверка, что ответ успешен (код 200)",
+											"if (pm.response.code === 200) {",
+											"    // Парсинг JSON-ответа",
+											"    const responseData = pm.response.json();",
+											"",
+											"    // Проверка наличия поля status",
+											"    if (responseData.status) {",
+											"        // Извлечение UUID из строки status",
+											"        const uuid = responseData.status.split(\" - \")[1];",
+											"",
+											"        // Проверка, что UUID извлечен корректно",
+											"        if (uuid) {",
+											"            // Сохранение UUID в переменную",
+											"            pm.environment.set(\"id\", uuid);",
+											"            console.log(\"UUID сохранен в переменную id:\", uuid);",
+											"        } else {",
+											"            console.log(\"Ошибка: Не удалось извлечь UUID из статуса.\");",
+											"        }",
+											"    } else {",
+											"        console.log(\"Ошибка: Поле status отсутствует в ответе.\");",
+											"    }",
+											"} else {",
+											"    console.log(\"Ошибка: Код статуса\", pm.response.code);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sellerID\": 123272,\n  \"name\": \"Диплом\",\n  \"price\": 100,\n  \"statistics\": {\n    \"contacts\": 3,\n    \"likes\": 123,\n    \"viewCount\": 12\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Создание объявления с минимальными значениями",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sellerID\": 1,\n  \"name\": \"a\",\n  \"price\": 0,\n  \"statistics\": {\n    \"contacts\": 0,\n    \"likes\": 0,\n    \"viewCount\": 0\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Создание объявления с максимальными значениями",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sellerID\": 999999,\n  \"name\": \"Шик шок чик Чок Ам Кок Ворк КЛо\",\n  \"price\": 999999,\n  \"statistics\": {\n    \"contacts\": 999999,\n    \"likes\": 999999,\n    \"viewCount\": 999999\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Негативные тесты",
+					"item": [
+						{
+							"name": "1. Создание объявления без sellerID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Чебурек\",\n  \"price\": 100,\n  \"statistics\": {\n    \"contacts\": 3,\n    \"likes\": 123,\n    \"viewCount\": 12\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Создание объявления без name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sellerID\": 123435,\n  \"price\": 100,\n  \"statistics\": {\n    \"contacts\": 3,\n    \"likes\": 123,\n    \"viewCount\": 12\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Создание объявления без price",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sellerID\": 125231,\n  \"name\": \"Чебупек\",\n  \"statistics\": {\n    \"contacts\": 3,\n    \"likes\": 123,\n    \"viewCount\": 12\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4. Создание объявления с price = -1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sellerID\": 754324,\n  \"name\": \"тест\",\n  \"price\": -1,\n  \"statistics\": {\n    \"contacts\": 3,\n    \"likes\": 123,\n    \"viewCount\": 12\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "5. Отправка пустого JSON",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "6. Создание объявления с некорректным sellerID (строка)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sellerID\": \"невалид\",\n  \"name\": \"Шик\",\n  \"price\": 100,\n  \"statistics\": {\n    \"contacts\": 3,\n    \"likes\": 123,\n    \"viewCount\": 12\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "7. Дублирование объявления",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sellerID\": 123272,\n  \"name\": \"Диплом\",\n  \"price\": 100,\n  \"statistics\": {\n    \"contacts\": 3,\n    \"likes\": 123,\n    \"viewCount\": 12\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "GET /api/1/item/:id",
+			"item": [
+				{
+					"name": "Позитивные тесты",
+					"item": [
+						{
+							"name": "1. Получение существующего объявления",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item/{{id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Негативные тесты",
+					"item": [
+						{
+							"name": "1. Запрос с несуществующим id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "non-кек-id"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Запрос с невалидным id (спецсимволы)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "invalid@id"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Запрос с id = null",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/item/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"item",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "null"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "GET /api/1/:sellerID/item",
+			"item": [
+				{
+					"name": "Позитивные тесты",
+					"item": [
+						{
+							"name": "1. Получение всех объявлений существующего продавца",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/:sellerID/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										":sellerID",
+										"item"
+									],
+									"variable": [
+										{
+											"key": "sellerID",
+											"value": "123272"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Продавец без объявлений",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/:sellerID/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										":sellerID",
+										"item"
+									],
+									"variable": [
+										{
+											"key": "sellerID",
+											"value": "8888865"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Негативные тесты",
+					"item": [
+						{
+							"name": "1. Запрос с несуществующим sellerID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/:sellerID/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										":sellerID",
+										"item"
+									],
+									"variable": [
+										{
+											"key": "sellerID",
+											"value": "8888545"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Запрос с sellerID = null",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/:sellerID/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										":sellerID",
+										"item"
+									],
+									"variable": [
+										{
+											"key": "sellerID",
+											"value": "null"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Запрос с sellerID в виде строки",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/:sellerID/item",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										":sellerID",
+										"item"
+									],
+									"variable": [
+										{
+											"key": "sellerID",
+											"value": "Невалид"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "GET /api/1/statistic/:id",
+			"item": [
+				{
+					"name": "Позитивные тесты",
+					"item": [
+						{
+							"name": "1. Получение статистики по существующему id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/statistic/{{id}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"statistic",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Негативные тесты",
+					"item": [
+						{
+							"name": "Запрос статистики по несуществующему id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Статус код 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/statistic/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"statistic",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "578db529-0989-4926-957a-000000000000"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Запрос с невалидным id (пустая строка)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/statistic/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"statistic",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Запрос с id = null",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/1/statistic/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"1",
+										"statistic",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "null"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://qa-internship.avito.com"
+		}
+	]
+}
